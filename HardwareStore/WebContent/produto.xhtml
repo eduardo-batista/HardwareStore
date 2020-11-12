@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<link rel="stylesheet"
+		href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+		crossorigin="anonymous" />
+	<title>Cadastro de Produto</title>
+</h:head>
+<h:body>
+	<div class="card">
+		<div class="card-body">
+			<h:form>
+				<div align="center">
+
+					<h:panelGrid columns="2">
+
+						<h:outputLabel value="Nome: " />
+						<h:panelGroup>
+							<h:inputText id="preenchaNome"
+								value="#{produtoController.entity.nome}" required="true"
+								requiredMessage="Preencha o campo Nome" pt:class="form-control"
+								pt:placeholder="Insira seu Nome..." validatorMessage="Informe um valor entre 3 e 80">
+								
+								<f:validateLength minimum="3" maximum="80" />
+								
+								</h:inputText>
+							
+							<h:message for="preenchaNome" style="color:red" />
+						</h:panelGroup>
+
+						<h:outputLabel value="Descrição: " />
+						<h:panelGroup>
+							<h:inputText id="preenchaDescricao"
+								value="#{produtoController.entity.descricao}" pt:class="form-control"
+								pt:placeholder="Insira a descrição..." validatorMessage="Limite de 280 caracteres">
+								
+								<f:validateLength minimum="0" maximum="80" />
+								
+								</h:inputText>
+							
+							<h:message for="preenchaDescricao" style="color:red" />
+						</h:panelGroup>
+						
+						<h:outputLabel value="Estoque: " />
+						<h:panelGroup>
+							<h:inputText id="preenchaEstoque"
+								value="#{produtoController.entity.estoque}" pt:class="form-control"
+								pt:placeholder="Insira a quantidade..." validatorMessage="Digite um valor maior que 0">
+								
+								<f:validateLength minimum="0" />
+								
+								</h:inputText>
+							
+							<h:message for="preenchaEstoque" style="color:red" />
+						</h:panelGroup>
+
+						<h:outputLabel value="Data de Recebimento: " />
+						<h:panelGroup>
+							<h:inputText id="itData"
+								value="#{produtoController.entity.dataDeRecebimento}"
+								pt:class="form-control" pt:placeholder="dd/mm/aaaa">
+								<f:convertDateTime type="localDate" pattern="dd/MM/yyyy" />
+							</h:inputText>
+
+							<h:message for="itData" style="color:red" />
+						</h:panelGroup>
+
+						<h:outputLabel value="Categoria " />
+						<h:selectOneMenu value="#{produtoController.entity.categoria}"
+							pt:class="custom-select">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{produtoController.listaCategoria}" var="obj"
+								itemLabel="#{obj.label}" />
+						</h:selectOneMenu>
+
+						<h:outputLabel value="Preço: " />
+						<h:panelGroup>
+							<h:inputText id="preenchaPreço"
+								value="#{produtoController.entity.preco}" pt:class="form-control"
+								pt:placeholder="Insira o valor..." validatorMessage="Digite um valor maior que 0">
+								
+								<f:validateLength minimum="0" />
+								
+								</h:inputText>
+							
+							<h:message for="preenchaPreco" style="color:red" />
+						</h:panelGroup>
+					</h:panelGrid>
+
+					<h:commandButton value="Incluir" pt:class="btn btn-success"
+						actionListener="#{produtoController.incluir()}"
+						disabled="#{produtoController.entity.id != null}"/>
+
+					<h:commandButton value="Alterar" pt:class="btn btn-primary"
+						actionListener="#{produtoController.alterar()}"
+						disabled="#{produtoController.entity.id == null}"/>
+				</div>
+
+			</h:form>
+
+			<div align="center">
+				<h:form>
+					<h:commandButton value="Limpar"
+						pt:class="btn btn-outline-secondary"
+						actionListener="#{produtoController.limpar()}" />
+
+					<div class="col-3">
+						<h:messages errorStyle="color:red" infoStyle="color:green"
+							warnStyle="color:orange" globalOnly="true" showDetail="false" />
+					</div>
+
+				</h:form>
+			</div>
+		</div>
+	</div>
+	<h:form>		
+		<h:dataTable class="table" value="#{produtoController.listaEntity}" var="obj">
+			<h:column>
+				<f:facet name="header">Id</f:facet>		
+				<h:outputLabel value="#{obj.id}"/>	
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Nome</f:facet>	
+				<h:commandLink value="#{obj.nome}" />
+			</h:column>	
+			
+			<h:column>
+				<f:facet name="header">Descrição</f:facet>		
+				<h:outputLabel value="#{obj.descricao}"/>	
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Estoque</f:facet>		
+				<h:outputLabel value="#{obj.estoque}"/>	
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Data de Recebimento</f:facet>		
+				<h:outputLabel value="#{obj.dataDeRecebimento}">
+					<f:convertDateTime type="localDate" pattern="dd-MM-yyyy" />
+				</h:outputLabel>	
+			</h:column>	
+			
+			<h:column>
+				<f:facet name="header">Categoria</f:facet>		
+				<h:outputLabel value="#{obj.categoria.label}"/>	
+			</h:column>	
+			
+			<h:column>
+				<f:facet name="header">Preço</f:facet>		
+				<h:outputLabel value="#{obj.preco}"/>	
+			</h:column>		
+			<h:column>
+				<h:commandButton value="Excluir" pt:class="btn btn-danger"
+					actionListener="#{produtoController.excluir(obj)}" />
+				<h:commandButton value="Editar" pt:class="btn btn-warning"
+					actionListener="#{produtoController.editar(obj)}" />
+			</h:column>							
+		</h:dataTable>
+	</h:form>	
+</h:body>
+</html>
