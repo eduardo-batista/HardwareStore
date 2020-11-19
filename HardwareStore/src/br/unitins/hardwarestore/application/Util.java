@@ -11,6 +11,8 @@ import javax.faces.component.visit.VisitContext;
 import javax.faces.component.visit.VisitResult;
 import javax.faces.context.FacesContext;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import com.sun.faces.component.visit.FullVisitContext;
 
 public class Util {
@@ -66,4 +68,8 @@ public class Util {
 
 	    return found[0];
 	}	
+	
+	public static String hash(String valor) {
+		return DigestUtils.sha256Hex(valor);
+	}
 }
